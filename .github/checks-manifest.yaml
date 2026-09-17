@@ -29,6 +29,11 @@ checks:
     triggers: ["plugins/db.py", "plugins/test_db_transcript_segments.py"]
     lanes: ["local", "ci"]
     reason: "#13663: the Redis-stored transcript segment buffer must be parsed with ast.literal_eval, never eval(), so a non-literal stored value cannot execute as code"
+  - id: plugin-twitter-app-uid-state-reflection-tests
+    command: ["python3", "plugins/test_uid_reflection_twitter.py"]
+    triggers: ["plugins/omi-twitter-app/**", "plugins/test_uid_reflection_twitter.py", ".github/checks-manifest.yaml"]
+    lanes: ["local", "ci"]
+    reason: "#14350: the client-controlled `state` callback param and `uid` setup param were reflected raw into HTML href attributes on the omi-twitter-app error and setup pages; a quote broke the attribute (reflected XSS) and a bare & or # corrupted the retry link"
   - id: gcal-null-params-tests
     command: ["python3", "plugins/omi-google-calendar-app/test_main.py"]
     triggers: ["plugins/omi-google-calendar-app/**"]
